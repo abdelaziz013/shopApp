@@ -1,9 +1,32 @@
 
 
   <a
-  class="btn btn-group btn-primary"
+  class="btn btn-group btn-primary add-product"
   routerLink="/admin/product-form">
    Add product
 </a>
 
+<table class="table">
+    <thead>
+      <tr>
+        <th scope="col">Title</th>
+        <th scope="col">Price</th>
+        <th scope="col">action</th>  
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products$|async">      
+        <td>{{product.data.title}}</td>
+        <td>$ {{product.data.price}}</td>
+        <td>
 
+              <a  [routerLink]="['/admin/product-form/edit/',product.id]">Edit</a>
+        
+           
+        </td>
+      </tr>
+   
+     
+        
+    </tbody>
+  </table>

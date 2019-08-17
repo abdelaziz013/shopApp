@@ -9,9 +9,9 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'user', canActivate: [AuthGuard], loadChildren: './user/user.module#UserModule' },
-  { path: 'admin', canActivate: [AuthGuard,AdminGuard], loadChildren: './admin/admin.module#AdminModule' },
+  { path: 'admin',loadChildren: './admin/admin.module#AdminModule' },
 ]
-
+// 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

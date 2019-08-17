@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { UserService } from '../user.service';
 import { isBoolean } from 'util';
 
@@ -16,16 +16,21 @@ export class AdminGuard implements CanActivate {
     private router: Router,
 
 
-  ) { }
-  canActivate() {
+  ) { 
 
-    return this.auth.user$.pipe(
-      map(user => {
-        if (user.isAdmin) {return true; }
-        this.router.navigate(['/']);
-        return false;
-      })
-    )
+
+
+  }
+  canActivate() {
+    
+
+    return this.auth.user$.pipe(     
+      map(user =>  user.isAdmin?true:false                      
+      //  if(user.isAdmin) return user.isAdmin 
+      //   this.router.navigate(['/']);             
+        
+      )
+        )   
 
   }
 

@@ -13,16 +13,7 @@ export class UserService {
 
 
 
-  setUserData(user){
-    const userRef:AngularFirestoreDocument <any>=this.db.doc(`users/${user.uid}`);
-    const userData:User ={
-      uid:user.uid,
-      displayName:user.displayName,
-      email:user.email
-    }
-
-    return userRef.set(userData,{merge:false})
-  }
+ 
 
   get(uid){
     return this.db.doc<User>(`users/${uid}`).valueChanges()
