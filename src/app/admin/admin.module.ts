@@ -6,14 +6,21 @@ import { AdminProductsComponent } from './admin-products/admin-products.componen
 import { AdminOrdersComponent } from './admin-orders/admin-orders.component';
 import { ProductFormComponent } from './product-form/product-form.component';
 import { FormsModule } from '@angular/forms';
-import { CustomFormsModule } from 'ng2-validation'
+import { CustomFormsModule } from 'ng2-validation';
+ import { DataTableModule } from 'angular7-data-table';
+
+
+
 @NgModule({
   declarations: [AdminProductsComponent, AdminOrdersComponent, ProductFormComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
     FormsModule,
-    CustomFormsModule 
+    CustomFormsModule,
+   
+
+    DataTableModule.forRoot()
   ]
 })
 export class AdminModule { }

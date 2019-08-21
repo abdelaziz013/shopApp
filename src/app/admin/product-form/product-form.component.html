@@ -12,7 +12,7 @@
         #title="ngModel"
         class="form-control"
       />
-      <div class="aler alert-danger" *ngIf="title.touched && title.invalid">
+      <div class="aler alert-danger" *ngIf="title?.touched && title?.invalid">
         <p>Title is required</p>
       </div>
 
@@ -35,14 +35,14 @@
           <span class="input-group-text">.00</span>
         </div>
       </div>
-      <div *ngIf="price.touched && price.invalid" class="aler alert-danger">
+      <div *ngIf="price?.touched && price?.invalid" class="aler alert-danger">
         <p *ngIf="price.errors?.required">Price is required</p>
         <p *ngIf="price.errors?.min">Price should be equall or more than 0</p>
       </div>
 
       <label for="category">Category</label>
       <select
-        [ngModel]="product?.category"
+        [ngModel]= "product?.category"
         name="category"
         id="category"
         #category="ngModel"
@@ -56,7 +56,7 @@
         }}</option>
       </select>
       <div
-        *ngIf="category.touched && category.invalid"
+        *ngIf="category?.touched && category?.invalid"
         class="aler alert-danger"
       >
         <p>Category is required</p>
@@ -74,26 +74,40 @@
         class="form-control"
       />
       <div
-        *ngIf="imageUrl.touched && imageUrl.invalid"
+        *ngIf="imageUrl?.touched && imageUrl?.invalid"
         class="aler alert-danger"
       >
         <p *ngIf="imageUrl.errors?.required">Image URL is required.</p>
         <p *ngIf="imageUrl.errors?.url">Please enter a valid URL</p>
       </div>
 
-      <button class="btn btn-primary add-product" type="submit">Save</button>
+      <button class="btn btn-primary add-product">Save</button>
+      <button
+        type="button"
+        [hidden]="mode !== 'edit'"
+        class="btn btn-danger add-product "
+        (click)="delete()"
+      >
+        delete
+      </button>
     </form>
   </div>
 
   <div class="col-md-6">
-    <div class="card" style="width: 18rem;">
-      <img [src]="imageUrl?.value" class="card-img-top" alt="Product Image" *ngIf="imageUrl?.value"/>
+     <div *ngIf="title.value"  class="card" style="width: 18rem;">
+      <img
+        [src]="imageUrl?.value"
+        class="card-img-top"
+        alt="Product Image"
+        *ngIf="imageUrl?.value"
+      />
       <div class="card-body">
         <h4 class="card-title">{{ title?.value }}</h4>
         <p class="card-text">
-          {{ price?.value | currency: "USD":true }}
+          {{ price?.value | currency: "USD" }}
         </p>
       </div>
-    </div>
+    </div> 
+  
   </div>
 </div>

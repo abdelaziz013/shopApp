@@ -26,8 +26,7 @@ export class AuthService {
     this.user$ = this.afauth.authState.pipe(
       switchMap(user => {
         if (user) {
-          this.updateUserData(user);
-          this.authStatusListenr.next(true);
+          this.updateUserData(user);        
           return this.afs.doc<User>(`users/${user.uid}`).valueChanges();
         } else {
           return of(null);
@@ -55,8 +54,11 @@ export class AuthService {
     return userRef.set(userData, { merge: true });
   }
 
-  logOut() {
+  logOut() { 
+   
     this.afauth.auth.signOut();
+     
+    
   }
 
   getAuthStatusListener() {

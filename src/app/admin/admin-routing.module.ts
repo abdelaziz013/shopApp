@@ -10,7 +10,7 @@ const routes: Routes = [
   {path:'products',component:AdminProductsComponent},
   {path:'orders',component:AdminOrdersComponent},
   {path:'product-form',component:ProductFormComponent},
-  {path:'product-form/edit/:id',component:ProductFormComponent},
+  {path:'product-form/:id',component:ProductFormComponent},
 
 ];
 

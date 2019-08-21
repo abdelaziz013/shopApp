@@ -1,32 +1,75 @@
-
-
-  <a
+<a
   class="btn btn-group btn-primary add-product"
-  routerLink="/admin/product-form">
-   Add product
+  routerLink="/admin/product-form"
+>
+  Add product
 </a>
 
-<table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Title</th>
-        <th scope="col">Price</th>
-        <th scope="col">action</th>  
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let product of products$|async">      
-        <td>{{product.data.title}}</td>
-        <td>$ {{product.data.price}}</td>
-        <td>
+<input
+#query
+(keyup)="filter(query.value)"
+type="text" class="form-control" placeholder="Search..." />
 
-              <a  [routerLink]="['/admin/product-form/edit/',product.id]">Edit</a>
-        
-           
-        </td>
-      </tr>
-   
-     
-        
-    </tbody>
-  </table>
+
+<div class="data-table" >
+ <data-table
+[items]="items"
+[itemCount]="itemCount"
+[pageLimits]="limits"
+(reload)="reloadItems($event)"
+
+>
+
+<data-table-column
+[property]="'title'"
+[header]="'Title'"
+[sortable]="true"
+[resizable]="true"
+>
+<ng-template #dataTableCell let-item="item">
+  {{item.data.title}}
+  </ng-template>
+
+</data-table-column>
+<data-table-column
+[property]="'price'"
+[header]="'Price'"
+[sortable]="true"
+[resizable]="true"
+>
+
+<ng-template #dataTableCell let-item="item">
+{{item.data.price |currency: "USD"}}
+</ng-template>
+</data-table-column>
+<data-table-column
+[property]="'id'"
+[header]="'Action'"
+>
+
+<ng-template #dataTableCell let-item="item">
+  <a [routerLink]="['/admin/product-form/', item.id]">Edit</a>
+</ng-template>
+</data-table-column>
+</data-table>  
+
+</div>
+
+<!-- <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Price</th>
+      <th scope="col">action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let product of fiteredProducts">
+      <td>{{ product?.data.title }}</td>
+      <td>$ {{ product?.data.price }}</td>
+      <td>
+        <a [routerLink]="['/admin/product-form/', product?.id]">Edit</a>
+      </td>
+    </tr>
+  </tbody>
+</table> -->

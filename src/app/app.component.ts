@@ -14,7 +14,7 @@ import { take } from 'rxjs/operators';
 })
 export class AppComponent implements OnInit {
   title = 'shoppingApp';
-authin =true
+  authin = true
 
   constructor(private auth: AuthService,
     private router: Router,
@@ -25,19 +25,18 @@ authin =true
 
   ngOnInit() {
 
-this.auth.getAuthStatusListener().subscribe(user=>{
-  if(user){
-    this.authin =false
-  }
-})
 
-this.auth.user$.pipe(take(1)).subscribe(user => {
-  if (user) {
-    let returnUrl = localStorage.getItem('retrunUrl')
-    // this.router.navigate([returnUrl])
-  }
-})
 
+    this.auth.user$.subscribe(user => {
+      if (user) {
+        let returnUrl = localStorage.getItem('retrunUrl')
+        
+        if (returnUrl) {        
+          this.router.navigate([returnUrl])
+          localStorage.removeItem('retrunUrl')
+        }
+      }
+    })
   }
 
 

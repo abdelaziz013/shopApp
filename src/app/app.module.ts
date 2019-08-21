@@ -1,5 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { DataTableModule } from 'angular7-data-table';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +17,12 @@ import { AuthService } from './auth/auth.service';
 import { AuthGuard } from './auth/auth-guard.service';
 import { UserService } from './user.service';
 import { AdminGuard } from './auth/admin.guard';
+import { TrialComponent } from './trial/trial.component';
+import { CommonModule } from '@angular/common';
+
+
+
+ 
 
 
 
@@ -27,26 +35,31 @@ import { AdminGuard } from './auth/admin.guard';
     HomeComponent,
     NavBarComponent,
     LoginComponent,
-
-
+     TrialComponent,
+  
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgbModule,   
-  
+    NgbModule,     
     AngularFireModule.initializeApp(environment.firbase), // imports firebase/app needed for everything
     AngularFirestoreModule, // imports firebase/firestore, only needed for database features
     AngularFireAuthModule, // imports firebase/auth, only needed for auth features,
-    AngularFireStorageModule // imports firebase/storage only needed for storage features
-
+    AngularFireStorageModule,// imports firebase/storage only needed for storage features
+    DataTableModule.forRoot(),
+    CommonModule
+    
 
   ],
+  
   providers: [
     AuthService,
     AuthGuard,
     AdminGuard,
     UserService
+  ],
+  exports:[
+    TrialComponent
   ],
   bootstrap: [AppComponent]
 })
