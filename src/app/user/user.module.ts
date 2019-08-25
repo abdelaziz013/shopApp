@@ -8,8 +8,8 @@ import { ProductsComponent } from './products/products.component';
 import { OrdersComponent } from './orders/orders.component';
 import { UserRoutingModule } from './user-routing.module';
 import { ProductFilterComponent } from './products/product-filter/product-filter.component';
-import { ProductCardComponent } from '../product-card/product-card.component';
-import { TrialComponent } from '../trial/trial.component';
+ import { ProductCardComponent } from './products/product-card/product-card.component';
+
 
 
 

@@ -10,11 +10,11 @@ export class ProductsService {
 
   constructor(private afs: AngularFirestore) { }
 
-  addProducet(product:Product) {
+  addProducet(product: Product) {
     return this.afs.collection('products').add(product)
   }
 
-  getProducts(){
+  getProducts() {
     return this.afs.collection<Product>('products').snapshotChanges()
       .pipe(
         map(snapshot => {
@@ -28,18 +28,18 @@ export class ProductsService {
       )
   }
 
-  getProductById(productId){
-   return this.afs.doc(`products/${productId}`).valueChanges()
+  getProductById(productId) {
+    return this.afs.doc(`products/${productId}`).valueChanges()
   }
 
-// updateproduct by id
-updateProductById(productId,product){
-  return this.afs.doc(`products/${productId}`).update(product)
-}
+  // updateproduct by id
+  updateProductById(productId, product) {
+    return this.afs.doc(`products/${productId}`).update(product)
+  }
 
-// deleteeproduct by id
-deleteProductById(productId){
-  return this.afs.doc(`products/${productId}`).delete()
-}
+  // deleteeproduct by id
+  deleteProductById(productId) {
+    return this.afs.doc(`products/${productId}`).delete()
+  }
 
 }

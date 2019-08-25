@@ -10,7 +10,7 @@ import { DataTableResource } from 'angular7-data-table';
   styleUrls: ['./admin-products.component.css']
 })
 export class AdminProductsComponent implements OnInit, OnDestroy {
-  products: { data: Product, id: string }[];  
+  products: { data: Product, id: string }[];
   Subscription: Subscription;
   tableResource: DataTableResource<{ data: Product, id: string }>
   items: { data: Product, id: string }[] = [];
@@ -22,7 +22,7 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.Subscription = this.producteService.getProducts().subscribe(productsData => {
-       this.products = productsData
+      this.products = productsData
       this.intializeTable(productsData)
     })
   }
@@ -40,16 +40,15 @@ export class AdminProductsComponent implements OnInit, OnDestroy {
   }
 
   reloadItems(params) {
-     if(!this.tableResource) return;
-    this.tableResource.query(params).then(items =>this.items = items)
+    if (!this.tableResource) return;
+    this.tableResource.query(params).then(items => this.items = items)
   }
 
   // filter
   filter(query: any) {
     let fiteredProducts = (query) ? this.products
       .filter(p => p.data.title.toLowerCase().includes(query.toLowerCase())) : this.products
-
-      this.intializeTable(fiteredProducts)
+    this.intializeTable(fiteredProducts)
   }
 
   ngOnDestroy() {
