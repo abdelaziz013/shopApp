@@ -6,12 +6,17 @@ import { take, map, switchMap } from 'rxjs/operators';
 
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Subject } from 'rxjs';
+import { CartItems } from './cart-items';
+
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
+  q: number
+
+  // productId$ = new Subject<Product["id"]>();
 
   constructor(private afs: AngularFirestore
 
@@ -28,27 +33,33 @@ export class ShoppingCartService {
 
   }
 
-  // get cart
-  async getCart() {
+  // get cart items
+  async getCartItems() {
     let cartId = await this.createOrGetCartId()
-    return this.afs.doc(`shoppingCart/${cartId}`).collection('items').valueChanges()
+    return this.afs.doc(`shoppingCart/${cartId}`).collection<CartItems>('items').valueChanges()
 
   }
 
+ 
 
-  // get items
+  // get one item
   getItem(cartId: string, productId: string) {
     return this.afs.doc<ShoppingCart>(`shoppingCart/${cartId}`)
-      .collection('items').doc(`items${productId}`)
+      .collection('items').doc<CartItems>(`items${productId}`)
   }
 
 
 
 
-  async getItemsQuantity(productId) {
-    let cartId = await this.createOrGetCartId()
-    let items = this.getItem(cartId, productId)
-    return items;
+  // get items quantity
+  getItemsQuantity(productId) {
+    let cartId = localStorage.getItem('cartId');
+    if (cartId) {
+      let items = this.getItem(cartId, productId)
+      return items;
+    }
+
+
   }
 
 
@@ -67,8 +78,15 @@ export class ShoppingCartService {
     // ref to item collection inside documents in shoppingCart collection
     let items = this.getItem(cartId, product.id)
     items.get().pipe(take(1)).subscribe(shopitem => {
-      if (shopitem.exists) items.update({ quantity: shopitem.data().quantity + 1 })
-      else items.set({ product: product, quantity: 1 })
+      if (shopitem.exists) {
+        items.update({ quantity: shopitem.data().quantity + 1 }).then(() => {
+        })
+
+      }
+      else {
+        items.set({ product: product, quantity: 1 })
+
+      }
     })
 
   }
@@ -79,7 +97,11 @@ export class ShoppingCartService {
     // ref to item collection inside documents in shoppingCart collection
     let items = this.getItem(cartId, product.id)
     items.get().pipe(take(1)).subscribe(shopitem => {
-      if (shopitem.exists) items.update({ quantity: shopitem.data().quantity - 1 })
+      if (shopitem.exists) {
+        items.update({ quantity: shopitem.data().quantity - 1 })
+        if (shopitem.data().quantity === 1) items.delete()
+      }
+
 
       // else items.set({ product: product, quantity: 1 })
     })
@@ -87,7 +109,10 @@ export class ShoppingCartService {
 
 
 
-
+  // update quantity
+  // getQuantityUpdate() {
+  //   return this.productId$.asObservable()
+  // }
 
 
 

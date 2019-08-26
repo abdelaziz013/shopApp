@@ -1,9 +1,9 @@
-import { Component, OnInit, Input, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, AfterViewInit, OnDestroy } from '@angular/core';
 // import { Product } from '../../admin/admin-products/product';
 
 import { ShoppingCartService } from '../../shopping-cart/shopping-cart.service';
-import { Subject } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { Subject, Subscription } from 'rxjs';
+import { switchMap, take } from 'rxjs/operators';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { ShoppingCart } from '../../shopping-cart/shopping-cart';
@@ -15,12 +15,14 @@ import { Product } from 'src/app/admin/admin-products/product';
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css']
 })
-export class ProductCardComponent implements OnInit {
+export class ProductCardComponent implements OnInit, OnDestroy {
   @Input() product;
   @Input() ShoppingCart;
-  item
-  quantity
-  productId$ = new Subject<Product["id"]>();
+  items
+  quantity  
+  quantitySubscription: Subscription
+  // productId$ = new Subject<Product["id"]>();
+
 
   constructor(private cartService: ShoppingCartService,
     private afs: AngularFirestore
@@ -30,50 +32,64 @@ export class ProductCardComponent implements OnInit {
 
   ngOnInit() {
     // get product quantity in cart
-    this.cartService.getItemsQuantity(this.product.id).then(items => {
-      items.get().subscribe(shopitem => {
-        if (shopitem.exists) {
-          this.quantity = shopitem.data().quantity
+    // this.cartService.getItemsQuantity(this.product.id)
+    //   .get().subscribe(shopitem => {
+    //     if (shopitem.exists) {
+    //       this.quantity = shopitem.data().quantity
+    //     } else {
+    //       this.quantity = 0
+    //     }
+    //   })
+
+
+    // update product Quantity
+    //  this.quantityUpdateSubscription= this.getQuantityUpdate().pipe(
+    //     switchMap((id) => {
+    //       let cartId = localStorage.getItem('cartId');
+    //       return this.afs.doc<ShoppingCart>(`shoppingCart/${cartId}`)
+    //         .collection('items')
+    //         .doc<{ product: Product, quantity: string }>(`items${id}`)
+    //         .valueChanges()
+    //     })
+    //   ).subscribe(product => {
+    //     if (product) this.quantity = product.quantity
+      
+    //   })
+
+this.quantitySubscription=this.cartService.getItemsQuantity(this.product.id)
+.valueChanges().subscribe(shopitem => {
+        if (shopitem) {
+          this.quantity = shopitem.quantity
         } else {
           this.quantity = 0
         }
       })
-    })
 
-    // update product Quantity
-    this.getQuantityUpdate().pipe(
-      switchMap((id) => {
-        let cartId = localStorage.getItem('cartId');
-        return this.afs.doc<ShoppingCart>(`shoppingCart/${cartId}`)
-          .collection('items')
-          .doc<{ product: Product, quantity: string }>(`items${id}`)
-          .valueChanges()
-      })
-    ).subscribe(product => {
-      if (product) this.quantity = product.quantity
-    })
-
+  
 
 
 
 
   }
   // add product to Cart
-  addToCart(product) {
-    this.cartService.AddToCart(product)
-    this.productId$.next(product.id)
+  addToCart() {
+    this.cartService.AddToCart(this.product)
+
+
   }
 
-  async removeFromCart(product) {
-    await this.cartService.removeFromCart(product)
-    this.productId$.next(product.id)
-
+  removeFromCart() {
+    this.cartService.removeFromCart(this.product)
   }
 
 
   // update quantity
-  getQuantityUpdate() {
-    return this.productId$.asObservable()
+  // getQuantityUpdate() {
+  //   return this.productId$.asObservable()
+  // }
+
+  ngOnDestroy() {
+    this.quantitySubscription.unsubscribe()
   }
 
 }
